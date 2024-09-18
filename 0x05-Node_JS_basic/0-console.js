@@ -1,9 +1,9 @@
 /**
  * 
- * @param {string}} msge 
+ * desplay message
  */
-const displayMessage = (msge) => {
+function displayMessage(msge) {
     console.log(msge);
-  };
+  }
   
 module.exports = displayMessage;
