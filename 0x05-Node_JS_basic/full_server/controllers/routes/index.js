@@ -1,9 +1,6 @@
 import AppController from '../controllers/AppController';
 import StudentsController from '../controllers/StudentsController';
 
-/**
- * Connects the routes
- */
 const mapRoutes = (app) => {
   app.get('/', AppController.getHomepage);
   app.get('/students', StudentsController.getAllStudents);
