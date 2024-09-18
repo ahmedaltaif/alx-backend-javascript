@@ -3,7 +3,6 @@ import StudentsController from '../controllers/StudentsController';
 
 /**
  * Connects the routes
- * @param {Express} app - The Express application instance
  */
 const mapRoutes = (app) => {
   app.get('/', AppController.getHomepage);

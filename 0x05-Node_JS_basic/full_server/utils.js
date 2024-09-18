@@ -1,11 +1,9 @@
 import fs from 'fs';
 
 /**
- * Read the data of the students in a CSV data file.
+ *
  * @param {String} dataPath
  * @returns Promise
- *   String: {firstname: String, lastname: String, age: number}[]
- * }>}
  */
 const readDatabase = (dataPath) => new Promise((resolve, reject) => {
   if (!dataPath) {
