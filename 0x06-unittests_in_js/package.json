@@ -4,14 +4,12 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-      "test": "mocha '*.test.js'"
+        "test": "mocha '*.test.js'"
     },
     "author": "ahmed altaif",
     "license": "ISC",
-    "dependencies": {
-      "mocha": "^10.2.0"
-    },
     "devDependencies": {
-      "chai": "^4.3.7"
+        "chai": "^4.3.7",
+        "mocha": "^10.7.3"
     }
-  }
+}
