@@ -1,24 +1,20 @@
 {
-    "name": "9-api",
+    "name": "8-api",
     "version": "1.0.0",
-    "main": "api.js",
-    "private": true,
-    "license": "MIT",
+    "description": "",
+    "main": "index.js",
     "scripts": {
-      "test": "node ./node_modules/mocha/bin/mocha"
+      "test": "./node_modules/mocha/bin/mocha"
     },
+    "author": "",
+    "license": "ISC",
     "dependencies": {
       "express": "^4.17.1"
     },
     "devDependencies": {
       "chai": "^4.2.0",
-      "mocha": "^6.2.2",
+      "mocha": "^10.7.3",
       "request": "^2.88.0",
-      "sinon": "^7.5.0"
-    },
-    "engines": {
-      "node": "16.x",
-      "npm": "8.x",
-      "yarn": "1.x"
+      "sinon": "^9.2.4"
     }
   }
