@@ -1,54 +1,117 @@
-// Import the Express module to create an application
-const express = require('express');
+const request = require("request");
+const {describe, it} = require("mocha");
+const expect = require("chai").expect;
 
-// Initialize an Express application
-const app = express();
-
-// Define the port where the server will listen for incoming requests
-const PORT = 7865;
-
-// Middleware to parse incoming JSON requests in POST requests
-app.use(express.json());
-
-// Define the root route handler for GET requests to '/'
-app.get('/', (_req, res) => {
-  // Respond with a welcome message when the root URL is accessed
-  res.send('Welcome to the payment system');
+describe("Index page", function() {
+    const options = {
+	url: "http://localhost:7865/",
+	method: "GET"
+    }
+    it("check correct status code", function(done) {
+	request(options, function(err, res, body) {
+	    expect(res.statusCode).to.equal(200);
+	    done();
+	});
+    });
+    it("check correct content", function(done) {
+	request(options, function(err, res, body) {
+	    expect(body).to.equal("Welcome to the payment system");
+	    done();
+	});
+    });
 });
 
-// Define a route for GET requests to /cart/:id with a numeric ID
-app.get('/cart/:id(\\d+)', (req, res) => {
-  // Extract the cart ID from the request parameters
-  const id = req.params.id;
-
-  // Respond with a message that includes the cart ID
-  res.send(`Payment methods for cart ${id}`);
+describe("Cart page", function() {
+    it("check correct status code for correct url", function(done) {
+	request.get("http://localhost:7865/cart/12", function(err, res, body) {
+	    expect(res.statusCode).to.equal(200);
+	    done();
+	});
+    });
+    it("check correct content for correct url", function(done) {
+	request.get("http://localhost:7865/cart/12", function(err, res, body) {
+	    expect(body).to.equal("Payment methods for cart 12");
+	    done();
+	});
+    });
+    it("check correct status code for incorrect url", function(done) {
+	request.get("http://localhost:7865/cart/kim", function(err, res, body) {
+	    expect(res.statusCode).to.equal(404);
+	    done();
+	});
+    });
 });
 
-// Define a route for GET requests to /available_payments
-app.get('/available_payments', (_req, res) => {
-  // Respond with a JSON object containing available payment methods
-  res.json({ payment_methods: { credit_cards: true, paypal: false } });
+describe("Available_payments page", function() {
+    it("check correct status for correct url", function() {
+	request.get("http://localhost:7865/available_payments", (err, res, body) => {
+	    if (err) {
+		expect(res.statusCode).to.not.equal(200);
+	    } else {
+		expect(res.statusCode).to.equal(200);
+	    }
+	});
+    });
+    it("check correct body content for correct url", function() {
+	const option = {json: true};
+	const payLoad = {
+	    payment_methods: {
+		credit_cards: true,
+		paypal: false
+	    }
+	}
+	request.get("http://localhost:7865/available_payments", option, (err, res, body) => {
+	    if (err) {
+		expect(res.statusCode).to.not.equal(200);
+	    } else {
+		expect(body).to.deep.equal(payLoad);
+	    }
+	});
+    });
 });
 
-// Define a route for POST requests to /login
-app.post('/login', (req, res) => {
-  let username = ''; // Initialize a variable to store the username
-
-  // If the request body contains a userName field, assign it to the username variable
-  if (req.body) {
-    username = req.body.userName;
-  }
-
-  // Respond with a message welcoming the user by their username
-  res.send(`Welcome ${username}`);
+describe("Login", function() {
+    it("check correct status code for request that's sent properly", function(done) {
+	const opt = {
+	    url: "http://localhost:7865/login",
+	    json: true,
+	    body: {
+		userName: 'JOE'
+	    }
+	};
+	request.post(opt, function(err, res, body) {
+	    expect(res.statusCode).to.equal(200);
+	    done();
+	});
+    });
+    it("check correct content for request that's sent properly", function(done) {
+	const opts = {
+	    url: "http://localhost:7865/login",
+	    json: true,
+	    body: {
+		userName: 'JOE'
+	    }
+	};
+	request.post(opts, function(err, res, body) {
+	    if (err) {
+		expect(res.statusCode).to.not.equal(200);
+	    } else {
+		expect(body).to.contain('Welcome JOE');
+	    }
+	    done();
+	});
+    });
+    it("check correct status code for request that's not sent properly", function(done) {
+	const op = {
+	    url: "http://localhost:7865/login",
+	    json: true,
+	    body: {
+		usame: 'JOE'
+	    }
+	};
+	request.post(op, function(err, res, body) {
+	    expect(res.statusCode).to.equal(404);
+	    done();
+	});
+    });
 });
-
-// Start the server and listen on the specified port
-app.listen(PORT, () => {
-  // Log a message to the console once the server is running
-  console.log(`API available on localhost port ${PORT}`);
-});
-
-// Export the Express app for testing or external use
-module.exports = app;
